@@ -4,11 +4,14 @@ import { requiredOptionalCodec, extendCodec, Logger, nullable } from '@bitaccess
 export type Resolve = (value: any) => void
 export type Reject = (reason?: any) => void
 
-export const Paginated = t.type({
-  page: t.number, // 1,
-  totalPages: t.number, // 30,
-  itemsOnPage: t.number, // 1000,
-}, 'Paginated')
+export const Paginated = t.type(
+  {
+    page: t.number, // 1,
+    totalPages: t.number, // 30,
+    itemsOnPage: t.number, // 1000,
+  },
+  'Paginated',
+)
 export type Paginated = t.TypeOf<typeof Paginated>
 
 export function paginated<C extends t.Mixed>(c: C) {
@@ -23,6 +26,8 @@ export const BlockbookConfig = requiredOptionalCodec(
     nodes: t.array(t.string),
   },
   {
+    /** Headers for request. Mostly used for authorization */
+    headers: t.record(t.string, t.string),
     /** Logger to use. undefined -> console, null -> disabled */
     logger: nullable(Logger),
     /**
@@ -44,24 +49,27 @@ export type BlockbookConfig = t.TypeOf<typeof BlockbookConfig>
  * Get status
  */
 
-export const BlockbookInfo = t.type({
-  coin: t.string, // 'Bitcoin',
-  host: t.string, // 'blockbook',
-  version: t.string, // '0.3.1',
-  gitCommit: t.string, // '3d9ad91',
-  buildTime: t.string, // '2019-05-17T14:34:00+00:00',
-  syncMode: t.boolean, // true,
-  initialSync: t.boolean, // false,
-  inSync: t.boolean, // true,
-  bestHeight: t.number, // 577261,
-  lastBlockTime: t.string, // '2019-05-22T18:03:33.547762973+02:00',
-  inSyncMempool: t.boolean, // true,
-  lastMempoolTime: t.string, // '2019-05-22T18:10:10.27929383+02:00',
-  mempoolSize: t.number, // 17348,
-  decimals: t.number, // 8,
-  dbSize: t.number, // 191887866502,
-  about: t.string, // 'Blockbook - blockchain indexer for ...'
-}, 'BlockbookInfo')
+export const BlockbookInfo = t.type(
+  {
+    coin: t.string, // 'Bitcoin',
+    host: t.string, // 'blockbook',
+    version: t.string, // '0.3.1',
+    gitCommit: t.string, // '3d9ad91',
+    buildTime: t.string, // '2019-05-17T14:34:00+00:00',
+    syncMode: t.boolean, // true,
+    initialSync: t.boolean, // false,
+    inSync: t.boolean, // true,
+    bestHeight: t.number, // 577261,
+    lastBlockTime: t.string, // '2019-05-22T18:03:33.547762973+02:00',
+    inSyncMempool: t.boolean, // true,
+    lastMempoolTime: t.string, // '2019-05-22T18:10:10.27929383+02:00',
+    mempoolSize: t.number, // 17348,
+    decimals: t.number, // 8,
+    dbSize: t.number, // 191887866502,
+    about: t.string, // 'Blockbook - blockchain indexer for ...'
+  },
+  'BlockbookInfo',
+)
 export type BlockbookInfo = t.TypeOf<typeof BlockbookInfo>
 
 export const BackendInfo = requiredOptionalCodec(
@@ -84,10 +92,13 @@ export const BackendInfo = requiredOptionalCodec(
 )
 export type BackendInfo = t.TypeOf<typeof BackendInfo>
 
-export const SystemInfo = t.type({
-  blockbook: BlockbookInfo,
-  backend: BackendInfo,
-}, 'ApiStatus')
+export const SystemInfo = t.type(
+  {
+    blockbook: BlockbookInfo,
+    backend: BackendInfo,
+  },
+  'ApiStatus',
+)
 export type SystemInfo = t.TypeOf<typeof SystemInfo>
 
 /**
@@ -142,7 +153,7 @@ export const NormalizedTxCommonVin = requiredOptionalCodec(
     coinbase: t.string, // '044c86041b020602'
     isAddress: t.boolean, // true
   },
-  'NormalizedTxCommonVin'
+  'NormalizedTxCommonVin',
 )
 
 /*
@@ -177,7 +188,7 @@ export const NormalizedTxCommonVout = requiredOptionalCodec(
     type: t.string,
     isAddress: t.boolean, // true
   },
-  'NormalizedTxCommonVout'
+  'NormalizedTxCommonVout',
 )
 
 /*
@@ -189,13 +200,16 @@ type EthereumSpecific struct {
 	GasPrice *Amount  `json:"gasPrice"`
 }
 */
-export const EthereumSpecific = t.type({
-  status: t.number, // 1,
-  nonce: t.number, // 2830,
-  gasLimit: t.number, // 36591,
-  gasUsed: t.number, // 36591,
-  gasPrice: t.string, // '11000000000'
-}, 'EthereumSpecific')
+export const EthereumSpecific = t.type(
+  {
+    status: t.number, // 1,
+    nonce: t.number, // 2830,
+    gasLimit: t.number, // 36591,
+    gasUsed: t.number, // 36591,
+    gasPrice: t.string, // '11000000000'
+  },
+  'EthereumSpecific',
+)
 export type EthereumSpecific = t.TypeOf<typeof EthereumSpecific>
 
 /*
@@ -210,16 +224,19 @@ type TokenTransfer struct {
 	Value    *Amount   `json:"value"`
 }
  */
-export const TokenTransfer = t.type({
-  type: t.string, // 'ERC20',
-  from: t.string, // '0x9c2e011c0ce0d75c2b62b9c5a0ba0a7456593803',
-  to: t.string, // '0x583cbbb8a8443b38abcc0c956bece47340ea1367',
-  token: t.string, // '0xc32ae45504ee9482db99cfa21066a59e877bc0e6',
-  name: t.string, // 'Tangany Test Token',
-  symbol: t.string, // 'TATETO',
-  decimals: t.number, // 18,
-  value: t.string, // '133800000'
-}, 'TokenTransfer')
+export const TokenTransfer = t.type(
+  {
+    type: t.string, // 'ERC20',
+    from: t.string, // '0x9c2e011c0ce0d75c2b62b9c5a0ba0a7456593803',
+    to: t.string, // '0x583cbbb8a8443b38abcc0c956bece47340ea1367',
+    token: t.string, // '0xc32ae45504ee9482db99cfa21066a59e877bc0e6',
+    name: t.string, // 'Tangany Test Token',
+    symbol: t.string, // 'TATETO',
+    decimals: t.number, // 18,
+    value: t.string, // '133800000'
+  },
+  'TokenTransfer',
+)
 export type TokenTransfer = t.TypeOf<typeof TokenTransfer>
 
 /*
@@ -274,34 +291,46 @@ export type NormalizedTxCommon = t.TypeOf<typeof NormalizedTxCommon>
  * Get block hash
  */
 
-export const BlockHashResponse = t.type({
-  blockHash: t.string, // 'ed8f3af8c10ca70a136901c6dd3adf037f0aea8a93fbe9e80939214034300f1e'
-}, 'BlockHashResponse')
+export const BlockHashResponse = t.type(
+  {
+    blockHash: t.string, // 'ed8f3af8c10ca70a136901c6dd3adf037f0aea8a93fbe9e80939214034300f1e'
+  },
+  'BlockHashResponse',
+)
 export type BlockHashResponse = t.TypeOf<typeof BlockHashResponse>
 
-export const BlockHashResponseWs = t.type({
- hash: t.string, // 'ed8f3af8c10ca70a136901c6dd3adf037f0aea8a93fbe9e80939214034300f1e'
-}, 'BlockHashResponseWs')
+export const BlockHashResponseWs = t.type(
+  {
+    hash: t.string, // 'ed8f3af8c10ca70a136901c6dd3adf037f0aea8a93fbe9e80939214034300f1e'
+  },
+  'BlockHashResponseWs',
+)
 export type BlockHashResponseWs = t.TypeOf<typeof BlockHashResponseWs>
 
 /**
  * subscribeNewBlock
  */
 
-export const SubscribeNewBlockEvent = t.type({
-  height: t.number,
-  hash: t.string,
-}, 'SubscribeNewBlockEvent')
+export const SubscribeNewBlockEvent = t.type(
+  {
+    height: t.number,
+    hash: t.string,
+  },
+  'SubscribeNewBlockEvent',
+)
 export type SubscribeNewBlockEvent = t.TypeOf<typeof SubscribeNewBlockEvent>
 
 /**
  * subscribeAddresses
  */
 
-export const SubscribeAddressesEvent = t.type({
-  address: t.string,
-  tx: NormalizedTxCommon,
-}, 'SubscribeAddressesEvent')
+export const SubscribeAddressesEvent = t.type(
+  {
+    address: t.string,
+    tx: NormalizedTxCommon,
+  },
+  'SubscribeAddressesEvent',
+)
 export type SubscribeAddressesEvent = t.TypeOf<typeof SubscribeAddressesEvent>
 
 /**
@@ -332,13 +361,7 @@ export type TokenDetailsTypeERC20 = t.TypeOf<typeof TokenDetailsTypeERC20>
 export const TokenDetailsTypeXpubAddress = t.literal('XPUBAddress')
 export type TokenDetailsTypeXpubAddress = t.TypeOf<typeof TokenDetailsTypeXpubAddress>
 
-export const TokenDetailsType = t.union(
-  [
-    TokenDetailsTypeERC20,
-    TokenDetailsTypeXpubAddress,
-  ],
-  'TokenDetailsType',
-)
+export const TokenDetailsType = t.union([TokenDetailsTypeERC20, TokenDetailsTypeXpubAddress], 'TokenDetailsType')
 export type TokenDetailsType = t.TypeOf<typeof TokenDetailsType>
 
 /*
@@ -361,7 +384,8 @@ export const TokenDetailsCommon = requiredOptionalCodec(
     type: TokenDetailsType,
     name: t.string,
     transfers: t.number,
-  }, {
+  },
+  {
     path: t.string,
     contract: t.string,
     symbol: t.string,
@@ -441,33 +465,40 @@ export const AddressDetailsCommonTokenBalances = extendCodec(
 )
 export type AddressDetailsCommonTokenBalances = t.TypeOf<typeof AddressDetailsCommonTokenBalances>
 
-export const AddressDetailsCommonTxids = paginated(extendCodec(
-  AddressDetailsCommonTokenBalances,
-  {},
-  {
-    txids: t.array(t.string),
-  },
-  'AddressDetailsCommonTxids',
-))
+export const AddressDetailsCommonTxids = paginated(
+  extendCodec(
+    AddressDetailsCommonTokenBalances,
+    {},
+    {
+      txids: t.array(t.string),
+    },
+    'AddressDetailsCommonTxids',
+  ),
+)
 export type AddressDetailsCommonTxids = t.TypeOf<typeof AddressDetailsCommonTxids>
 
-export const AddressDetailsCommonTxs = paginated(extendCodec(
-  AddressDetailsCommonTokenBalances,
-  {},
-  {
-    txs: t.array(NormalizedTxCommon),
-  },
-  'AddressDetailsCommonTxs',
-))
+export const AddressDetailsCommonTxs = paginated(
+  extendCodec(
+    AddressDetailsCommonTokenBalances,
+    {},
+    {
+      txs: t.array(NormalizedTxCommon),
+    },
+    'AddressDetailsCommonTxs',
+  ),
+)
 export type AddressDetailsCommonTxs = t.TypeOf<typeof AddressDetailsCommonTxs>
 
 /**
  * Get utxos
  */
 
-export const GetUtxosOptions = t.partial({
-  confirmed: t.boolean,
-}, 'GetUtxosOptions')
+export const GetUtxosOptions = t.partial(
+  {
+    confirmed: t.boolean,
+  },
+  'GetUtxosOptions',
+)
 export type GetUtxosOptions = t.TypeOf<typeof GetAddressDetailsOptions>
 
 export const UtxoDetails = requiredOptionalCodec(
@@ -501,12 +532,15 @@ export type UtxoDetailsXpub = t.TypeOf<typeof UtxoDetailsXpub>
  * Get block
  */
 
-export const GetBlockOptions = t.partial({
-  page: t.number,
-}, 'GetBlockOptions')
+export const GetBlockOptions = t.partial(
+  {
+    page: t.number,
+  },
+  'GetBlockOptions',
+)
 export type GetBlockOptions = t.TypeOf<typeof GetBlockOptions>
 
- /*
+/*
 type BlockInfo struct {
 	Hash          string      `json:"hash"`
 	Prev          string      `json:"previousBlockHash,omitempty"`
@@ -523,49 +557,57 @@ type BlockInfo struct {
 	Txids         []string    `json:"tx,omitempty"`
 }
   */
- export const BlockInfoCommon = paginated(requiredOptionalCodec(
-  {
-    hash: t.string, // '760f8ed32894ccce9c1ea11c8a019cadaa82bcb434b25c30102dd7e43f326217',
-    height: t.number, // 2648059,
-    confirmations: t.number, // 47,
-    size: t.number, // 951,
-    version: t.number, // 6422787,
-    merkleRoot: t.string, // '6783f6083788c4f69b8af23bd2e4a194cf36ac34d590dfd97e510fe7aebc72c8',
-    nonce: t.string, // '0',
-    bits: t.string, // '1a063f3b',
-    difficulty: t.string, // '2685605.260733312',
-    txCount: t.number, // 2,
-  },
-  {
-    previousBlockHash: t.string, // '786a1f9f38493d32fd9f9c104d748490a070bc74a83809103bcadd93ae98288f',
-    nextBlockHash: t.string, // '151615691b209de41dda4798a07e62db8429488554077552ccb1c4f8c7e9f57a',
-    time: t.number, // 1553096617,
-    txs: t.array(NormalizedTxCommon),
-  },
-  'BlockInfoCommon'
-))
+export const BlockInfoCommon = paginated(
+  requiredOptionalCodec(
+    {
+      hash: t.string, // '760f8ed32894ccce9c1ea11c8a019cadaa82bcb434b25c30102dd7e43f326217',
+      height: t.number, // 2648059,
+      confirmations: t.number, // 47,
+      size: t.number, // 951,
+      version: t.number, // 6422787,
+      merkleRoot: t.string, // '6783f6083788c4f69b8af23bd2e4a194cf36ac34d590dfd97e510fe7aebc72c8',
+      nonce: t.string, // '0',
+      bits: t.string, // '1a063f3b',
+      difficulty: t.string, // '2685605.260733312',
+      txCount: t.number, // 2,
+    },
+    {
+      previousBlockHash: t.string, // '786a1f9f38493d32fd9f9c104d748490a070bc74a83809103bcadd93ae98288f',
+      nextBlockHash: t.string, // '151615691b209de41dda4798a07e62db8429488554077552ccb1c4f8c7e9f57a',
+      time: t.number, // 1553096617,
+      txs: t.array(NormalizedTxCommon),
+    },
+    'BlockInfoCommon',
+  ),
+)
 export type BlockInfoCommon = t.TypeOf<typeof BlockInfoCommon>
 
 /**
  * Send transaction
  */
 
-export const SendTxSuccess = t.type({
-  result: t.string, // '7c3be24063f268aaa1ed81b64776798f56088757641a34fb156c4f51ed2e9d25'
-}, 'SendTransactionSuccess')
+export const SendTxSuccess = t.type(
+  {
+    result: t.string, // '7c3be24063f268aaa1ed81b64776798f56088757641a34fb156c4f51ed2e9d25'
+  },
+  'SendTransactionSuccess',
+)
 export type SendTxSuccess = t.TypeOf<typeof SendTxSuccess>
 
 export const SendTxError = t.type(
   {
     error: t.type({
       message: t.string, // 'error message'
-    })
+    }),
   },
-  'SendTxFailed'
+  'SendTxFailed',
 )
 export type SendTxError = t.TypeOf<typeof SendTxError>
 
-export const EstimateFeeResponse = t.type({
-  result: t.string,
-}, 'EstimateFeeResponse')
+export const EstimateFeeResponse = t.type(
+  {
+    result: t.string,
+  },
+  'EstimateFeeResponse',
+)
 export type EstimateFeeResponse = t.TypeOf<typeof EstimateFeeResponse>

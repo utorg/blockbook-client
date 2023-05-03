@@ -25,7 +25,6 @@ import {
   GetUtxosOptions,
   GetXpubDetailsOptions,
   SendTxSuccess,
-  SendTxError,
   Resolve,
   Reject,
   SystemInfoWs,
@@ -62,6 +61,9 @@ export abstract class BaseBlockbook<
 > {
   /** Blockbook URIs */
   nodes: string[]
+
+  /** Request headers */
+  headers: {}
 
   /** Set to true to turn off response type validation */
   disableTypeValidation: boolean
@@ -137,6 +139,9 @@ export abstract class BaseBlockbook<
 
     // Turn on debug logging
     this.debug = process.env.DEBUG?.includes('blockbook-client') ?? false
+
+    // Set request headers from config
+    this.headers = config.headers || {}
   }
 
   doAssertType<T>(codec: t.Type<T, any, unknown>, value: unknown, ...rest: any[]): T {
@@ -158,10 +163,18 @@ export abstract class BaseBlockbook<
     body?: AxiosRequestConfig['data'],
     options?: Partial<AxiosRequestConfig>,
   ) {
-    const response = jsonRequest(this.pickNode(), method, path, params, body, {
-      timeout: this.requestTimeoutMs,
-      ...options,
-    })
+    const response = jsonRequest(
+      this.pickNode(),
+      method,
+      path,
+      params,
+      body,
+      {
+        timeout: this.requestTimeoutMs,
+        ...options,
+      },
+      this.headers,
+    )
     if (this.debug) {
       this.logger.debug(`http result ${method} ${path}`, response)
     }
@@ -274,7 +287,7 @@ export abstract class BaseBlockbook<
 
     // Store the promise before awaiting to prevent a race case
     this.wsPendingConnectPromise = new Promise<void>((resolve, reject) => {
-      this.ws = new WebSocket(node, { headers: { 'user-agent': USER_AGENT } })
+      this.ws = new WebSocket(node, { headers: { 'user-agent': USER_AGENT, ...this.headers } })
       this.ws.once('open', () => {
         this.logger.log(`socket connected to ${node}`)
         this.wsConnected = true

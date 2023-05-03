@@ -1,6 +1,6 @@
 {
-  "name": "blockbook-client",
-  "version": "0.7.8",
+  "name": "@utorgcom/blockbook-client",
+  "version": "0.8.2",
   "description": "Client for interacting with Trezor's blockbook API",
   "main": "dist/index.cjs.js",
   "module": "dist/index.es.js",
@@ -9,11 +9,11 @@
   "esnext": "dist/lib/index.js",
   "repository": {
     "type": "git",
-    "url": "git@github.com:bitaccess/blockbook-client.git"
+    "url": "git@github.com:utorg/blockbook-client.git"
   },
-  "homepage": "https://github.com/bitaccess/blockbook-client#readme",
+  "homepage": "https://github.com/utorg/blockbook-client#readme",
   "bugs": {
-    "url": "https://github.com/bitaccess/blockbook-client/issues"
+    "url": "https://github.com/utorg/blockbook-client/issues"
   },
   "keywords": [
     "bitcoin",
@@ -26,7 +26,8 @@
     "src/"
   ],
   "contributors": [
-    "Dylan Seago <dylan@bitaccess.co>"
+    "Dylan Seago <dylan@bitaccess.co>",
+    "Sam Krew <samkrew@utorg.com>"
   ],
   "license": "MIT",
   "engines": {

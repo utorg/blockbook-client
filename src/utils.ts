@@ -1,17 +1,9 @@
-import axios, { AxiosRequestConfig, AxiosError } from 'axios'
+import axios, { AxiosRequestConfig } from 'axios'
 import { isString } from '@bitaccess/ts-common'
 import qs from 'qs'
 
 export const USER_AGENT =
   'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36'
-
-function tryParseJson(body: any): any {
-  try {
-    return JSON.parse(body)
-  } catch (e) {
-    return body
-  }
-}
 
 export async function jsonRequest(
   host: string,
@@ -20,6 +12,7 @@ export async function jsonRequest(
   params?: object,
   body?: object,
   options?: Partial<AxiosRequestConfig>,
+  headers?: Record<string, string>,
 ) {
   if (!host.startsWith('http')) {
     host = `https://${host}`
@@ -34,6 +27,7 @@ export async function jsonRequest(
     ...options,
     headers: {
       'user-agent': USER_AGENT,
+      ...headers,
     },
   }
   try {
